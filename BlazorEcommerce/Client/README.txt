@@ -82,6 +82,10 @@ Section 02:
 	-> Add: _fieldName, _, camel case name
 	-> Add: Suggest.
 
+Section 3: Adding & Using Best Practices
+30. Implement a Service Response with Generics
+31. Using Services With Dependency Injection
+32. add ProductService to the Client
 
 
 
