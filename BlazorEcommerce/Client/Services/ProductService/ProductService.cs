@@ -10,6 +10,8 @@ namespace BlazorEcommerce.Client.Services.ProductService
             _http = http;
         }
 
+        public string Message { get; set; } = "Loading product...";
+
         public List<Product> Products { get; set; } = new List<Product>();
 
         public event Action ProductsChanged;
@@ -30,6 +32,22 @@ namespace BlazorEcommerce.Client.Services.ProductService
                 Products = result.Data;
 
             ProductsChanged.Invoke(); // Báo StateHasChanged dữ liệu thay đổi.
+        }
+
+        public async Task<List<string>> GetProductSearchSuggestions(string searchText)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<string>>>($"api/product/searchsuggestions/{searchText}");
+            return result.Data;
+        }
+
+        public async Task SearchProducts(string searchText)
+        {
+            var result = await _http.GetFromJsonAsync<ServiceResponse<List<Product>>>($"api/product/search/{searchText}");
+            if (result != null && result.Data != null)
+                Products = result.Data;
+            if (Products.Count == 0) Message = "No Product found.";
+
+            ProductsChanged?.Invoke();
         }
     }
 }
