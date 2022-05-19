@@ -25,6 +25,13 @@
             return response;
         }
 
+        public async Task<ServiceResponse<List<Product>>> GetProductsAsync()
+        {
+            var products = await _context.Products.ToListAsync();
+            var response = new ServiceResponse<List<Product>> { Data = products };
+            return response;
+        }
+
         public async Task<ServiceResponse<List<Product>>> GetProductsByCategoryAsync(string categoryUrl)
         {
             var response = new ServiceResponse<List<Product>>
@@ -34,14 +41,8 @@
                 .ToListAsync()
             };
             return response;
-
         }
 
-        public async Task<ServiceResponse<List<Product>>> GetProductsAsync()
-        {
-            var products = await _context.Products.ToListAsync();
-            var response = new ServiceResponse<List<Product>> { Data = products };
-            return response;
-        }
+       
     }
 }

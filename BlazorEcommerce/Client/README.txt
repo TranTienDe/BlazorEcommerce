@@ -86,6 +86,22 @@ Section 3: Adding & Using Best Practices
 30. Implement a Service Response with Generics
 31. Using Services With Dependency Injection
 32. add ProductService to the Client
+47. Get Products by Category on the Client
+	- Add param: GetProduct(string CategoryUrl);
+	- Add event: event Action ProductsChanged;
+	- Add param: @page "/{categoryurl}" tham số đầu vào trang
+	- Khi load xong danh sách sản phẩm: ProductsChanged.Invoke()
+	- Trong ProductList: hàm OnInitialized() đăng ký StateHasChanged;
+	- @implements IDisposable: để hủy hàm StateHasChanged.
 
+	protected override void OnInitialized()
+    {
+        ProductService.ProductsChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ProductService.ProductsChanged -= StateHasChanged;
+    }
 
 
