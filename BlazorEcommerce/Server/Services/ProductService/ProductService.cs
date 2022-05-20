@@ -82,12 +82,36 @@
             return new ServiceResponse<List<string>> { Data = results };
         }
 
-        public async Task<ServiceResponse<List<Product>>> SearchProducts(string searchText)
+        /// <summary>
+        /// Tìm kiếm sản phẩm
+        /// </summary>
+        /// <param name="searchText"></param>
+        /// <param name="page">Số thứ tự page</param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<ProductSearchResult>> SearchProducts(string searchText, int page)
         {
-            var response = new ServiceResponse<List<Product>>
+            var pageResults = 2f; // Số lượng dòng trên 1 page
+            var pageCount = Math.Ceiling((await FindProductsBySearchText(searchText)).Count / pageResults);  // Số lượng page
+            var products = await _context.Products
+                            .Where(
+                                p => p.Title.ToLower().Contains(searchText.ToLower()) ||
+                                p.Description.ToLower().Contains(searchText.ToLower())
+                                )
+                            .Include(p => p.Variants)
+                            .Skip((page - 1) * (int)pageResults) // Dòng bắt đầu lấy
+                            .Take((int)pageResults)              // Lấy bao nhiêu dòng
+                            .ToListAsync();
+
+            var response = new ServiceResponse<ProductSearchResult>
             {
-                Data = await FindProductsBySearchText(searchText)
+                Data = new ProductSearchResult
+                {
+                    Products = products,   // Danh sách sản phẩm
+                    CurrentPage = page,    // Page truyền lên
+                    Pages = (int)pageCount // Số lượng trang trả về
+                }
             };
+
             return response;
         }
 
