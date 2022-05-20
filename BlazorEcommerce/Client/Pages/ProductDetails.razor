@@ -21,7 +21,7 @@ else
                     <select class="form-select" @bind="currentTypeId">
                         @foreach (var variant in product.Variants)
                         {
-                            <option value="@variant.ProductId">
+                            <option value="@variant.ProductTypeId">
                                 @variant.ProductType.Name
                             </option>
                         }
