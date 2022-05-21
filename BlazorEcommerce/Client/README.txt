@@ -104,4 +104,8 @@ Section 3: Adding & Using Best Practices
         ProductService.ProductsChanged -= StateHasChanged;
     }
 
-
+70. Introducing the Cart with the Local Storage
+Nội dung:
+	- Install nuget for Client: Blazored.LocalStorage
+	- Add in Program.cs: builder.Services.AddBlazoredLocalStorage();
+	- Add in _imports.razor: @using Blazored.LocalStorage;
