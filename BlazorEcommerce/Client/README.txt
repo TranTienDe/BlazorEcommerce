@@ -109,3 +109,51 @@ Nội dung:
 	- Install nuget for Client: Blazored.LocalStorage
 	- Add in Program.cs: builder.Services.AddBlazoredLocalStorage();
 	- Add in _imports.razor: @using Blazored.LocalStorage;
+
+Section 5:
+- Add model and razor: UserRegister.class, Register.razor 
+- Add UserMenu: UserButton.razor
+- Add Annotation to UserRegister.clas
+- Add valid <DataAnnotationsValidator> to Register.razor
+- Add <ValidattionSummary /> hiển thị lỗi.
+- Hiển thị lỗi cho từng control: <ValidationMessage For="@(() => user.Email)" />
+
+107. Implement a CustomAuthenticationStateProvider
+- Add package to Client: Microsoft.AspNetCore.Components.Authorization
+- Add class: CustomAuthStateProvider
+	1. Lấy token từ LocalStorage.
+	2. Tạo 1 ClaimsIdentity chứa thông user từ token.
+
+- Add Program.cs:
+	global using Microsoft.AspNetCore.Components.Authorization;
+
+	builder.Services.AddOptions();
+	builder.Services.AddAuthorizationCore();
+	builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+110. Add a Return Url to the Login
+	1. Add package to client: Microsoft.AspNetCore.WebUtilities
+	2. Add tham số returnUrl trong nút chọn login
+		<a href="login?returnUrl=@NavigationManager.ToBaseRelativePath(NavigationManager.Uri)" class="dropdown-item">Login</a>
+	3. Lấy tham số returnUrl trong init login
+	protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("returnUrl", out var url))
+        {
+            returnUrl = url;
+        }
+    }
+112. utilize the [Authorize] Attribute on the Client
+Nội dung:
+	1. Add to file _import.cs: @using Microsoft.AspNetCore.Authorization;
+	2. Add Attribute: to razor file: @attribute [Authorize]
+	3. Add text to App.razor: 
+		<AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(ShopLayout)">
+			<NotAuthorized>
+				<h3>Whoops! You're not allowed to see this page.'</h3>
+				<h5>Please <a href="login">login</a> or <a href="register">register</a> for a new account.</h5>
+			</NotAuthorized>
+		</AuthorizeRouteView>
+
+
